@@ -1,5 +1,6 @@
 this is a test to merge
+
 这是master分支的内容
 
-
+这是分支branch1的内容
 
