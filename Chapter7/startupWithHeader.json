@@ -1,0 +1,25 @@
+[
+  {
+    "description": "带请求头的请求",
+    "request": {
+      "uri": "/post/with/header",
+      "method": "post",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "json": {
+        "name": "lisi",
+        "sex": "woman"
+      }
+    },
+    "response": {
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "json": {
+        "lisi": "李四请求成功",
+        "status": "1"
+      }
+    }
+  }
+]
