@@ -14,10 +14,15 @@ public class MyHttpClient {
     public void test() throws IOException {
         //用来存放结果
         String result;
-        HttpGet get = new HttpGet("http://www.baidu.com");
-        //这个是用来执行get方法的
+        //1.创建HttpClient对象
         HttpClient client = new DefaultHttpClient();
+        //2.创建请求方法的实例，并指定请求URL。因需要发送GET请求，创建HttpGet对象
+        HttpGet get = new HttpGet("http://www.baidu.com");
+        //3.调用HttpClient对象的execute()方法来发送请求，
+        //4.并用HttpResponse获取响应信息
         HttpResponse response = client.execute(get);
+        //5.利用HttpClient提供的工具类 EntityUtils，将Entity转为字符串
+        //处理响应结果
         result = EntityUtils.toString(response.getEntity(), "utf-8");
         System.out.println(result);
     }
