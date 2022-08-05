@@ -8,7 +8,8 @@ import com.course.utils.DatabaseUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONObject;
@@ -24,7 +25,7 @@ public class LoginTest {
     @BeforeTest(groups = "loginTrue",description = "测试准备工作,获取HttpClient对象")
     public void beforeTest(){
         //1.创建HttpClient对象
-        TestConfig.defaultHttpClient = new DefaultHttpClient();
+        TestConfig.client = HttpClients.custom().setDefaultCookieStore(TestConfig.store).build();
         //2.获取各个测试接口访问的url
         TestConfig.getUserInfoUrl = ConfigFile.getUrl(InterfaceName.GETUSERINFO);
         TestConfig.getUserListUrl = ConfigFile.getUrl(InterfaceName.GETUSERLIST);
@@ -73,7 +74,7 @@ public class LoginTest {
         HttpPost post = new HttpPost(TestConfig.loginUrl);
         //5.添加参数
         JSONObject param = new JSONObject();
-        param.put("name",loginCase.getUserName());
+        param.put("userName",loginCase.getUserName());
         param.put("password",loginCase.getPassword());
         //6.设置请求头信息 设置header
         post.setHeader("content-type","application/json");
@@ -83,11 +84,10 @@ public class LoginTest {
         //声明一个对象来进行响应结果的存储
         String result;
         //8.执行post方法
-        HttpResponse response = TestConfig.defaultHttpClient.execute(post);
+        HttpResponse response = TestConfig.client.execute(post);
         //9.获取响应结果
         result = EntityUtils.toString(response.getEntity(),"utf-8");
         System.out.println(result);
-        TestConfig.store = TestConfig.defaultHttpClient.getCookieStore();
         return result;
     }
 }

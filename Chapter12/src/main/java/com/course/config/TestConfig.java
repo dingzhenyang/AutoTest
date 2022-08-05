@@ -2,7 +2,8 @@ package com.course.config;
 
 import lombok.Data;
 import org.apache.http.client.CookieStore;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 
 @Data
@@ -21,8 +22,8 @@ public class TestConfig {
 
 
     //用来存储cookies信息的变量
-    public static CookieStore store;
+    public static CookieStore store = new BasicCookieStore();
     //声明http客户端
-    public static DefaultHttpClient defaultHttpClient;
+    public static CloseableHttpClient client;
 
 }

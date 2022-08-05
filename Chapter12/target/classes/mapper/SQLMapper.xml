@@ -5,13 +5,16 @@
 <mapper namespace="com.course.model">
 
     <!--获取登陆接口case-->
-    <select id="loginCase" parameterType="Integer"  resultType="com.course.model.LoginCase">
-        select * from loginCase
+    <select id="loginCase" parameterType="Integer" resultType="com.course.model.LoginCase">
+        select *
+        from loginCase
         where id = #{id};
     </select>
     <!--添加用户接口case-->
     <select id="addUserCase" parameterType="Integer" resultType="com.course.model.AddUserCase">
-        select * from addUserCase where id=#{id};
+        select *
+        from addUserCase
+        where id = #{id};
     </select>
 
     <!--获取用户信息case-->
@@ -28,19 +31,22 @@
 
     <!--更新/删除用户信息case-->
     <select id="updateUserInfoCase" parameterType="Integer" resultType="com.course.model.UpdateUserInfoCase">
-        select * from updateUserInfoCase where id = #{id};
+        select *
+        from updateUserInfoCase
+        where id = #{id};
     </select>
 
 
     <!--添加用户接口-->
     <select id="addUser" parameterType="com.course.model.AddUserCase" resultType="com.course.model.User">
-        select * from user where
-            userName=#{userName}
-                             and password=#{password}
-                             and sex=#{sex}
-                             and age=#{age}
-                             and permission=#{permission}
-                             and isDelete=#{isDelete};
+        select *
+        from user
+        where userName = #{userName}
+          and password = #{password}
+          and sex = #{sex}
+          and age = #{age}
+          and permission = #{permission}
+          and isDelete = #{isDelete};
 
     </select>
 
@@ -71,7 +77,8 @@
     </select>
 
     <!--获取更新后的数据-->
-    <select id="getUpdateUserInfo" parameterType="com.course.model.UpdateUserInfoCase" resultType="com.course.model.User">
+    <select id="getUpdateUserInfo" parameterType="com.course.model.UpdateUserInfoCase"
+            resultType="com.course.model.User">
         select * from user
         <trim prefix="WHERE" prefixOverrides="and">
             <if test="null != userName and '' !=userName">
@@ -91,6 +98,11 @@
             </if>
         </trim>
         And id = #{userId};
+    </select>
+    <!-- 获取user表一共有多少条数据 -->
+    <select id="userCount" resultType="Integer">
+        SELECT count(id)
+        from user
     </select>
 
 

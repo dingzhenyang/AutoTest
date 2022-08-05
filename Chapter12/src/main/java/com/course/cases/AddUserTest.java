@@ -20,17 +20,19 @@ public class AddUserTest {
     public void addUser() throws IOException {
         SqlSession session = DatabaseUtil.getSqlSession();
         AddUserCase userCase  = session.selectOne("addUserCase", 1);
+        int id = session.selectOne("userCount");
+        id = id + 1;
         System.out.println(userCase.toString());
         System.out.println(TestConfig.addUserUrl);
 
-        String result = getResult(userCase);
-        Assert.assertEquals(userCase.getExpected(), result);
-
+        String result = getResult(userCase, Integer.toString(id));
+        Assert.assertEquals(result, userCase.getExpected());
     }
 
-    private String getResult(AddUserCase userCase) throws IOException {
+    private String getResult(AddUserCase userCase, String id) throws IOException {
         HttpPost post = new HttpPost(TestConfig.addUserUrl);
         JSONObject param = new JSONObject();
+        param.put("id", id);
         param.put("userName", userCase.getUserName());
         param.put("password", userCase.getPassword());
         param.put("sex", userCase.getSex());
@@ -39,8 +41,8 @@ public class AddUserTest {
         param.put("isDelete", userCase.getIsDelete());
         StringEntity entity = new StringEntity(param.toString(), "utf-8");
         post.setEntity(entity);
-        TestConfig.defaultHttpClient.setCookieStore(TestConfig.store);
-        CloseableHttpResponse execute = TestConfig.defaultHttpClient.execute(post);
+        post.setHeader("content-type","application/json");
+        CloseableHttpResponse execute = TestConfig.client.execute(post);
         String s = EntityUtils.toString(execute.getEntity());
 
         return s;

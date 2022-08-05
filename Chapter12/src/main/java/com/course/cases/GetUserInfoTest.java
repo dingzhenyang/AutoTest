@@ -1,10 +1,10 @@
 package com.course.cases;
 
+import com.alibaba.fastjson.JSONArray;
 import com.course.config.TestConfig;
 import com.course.model.GetUserInfoCase;
 import com.course.model.User;
 import com.course.utils.DatabaseUtil;
-import com.google.gson.Gson;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -15,6 +15,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GetUserInfoTest {
 
@@ -23,17 +24,14 @@ public class GetUserInfoTest {
         //获取测试数据
         SqlSession session = DatabaseUtil.getSqlSession();
         GetUserInfoCase userInfoCase = session.selectOne("getUserInfoCase", 1);
-        User user = session.selectOne(userInfoCase.getExpected(), userInfoCase);
         //获取某个用户信息的预期内容
-        System.out.println(user.toString());
+        User expected = session.selectOne(userInfoCase.getExpected(), userInfoCase);
         //访问地址
         System.out.println(TestConfig.getUserInfoUrl);
         //服务器响应体内容
-        String result = getResult(userInfoCase);
-        //将java对象转成json字符串
-        String s = new Gson().toJson(user);
+        String actual = getResult(userInfoCase);
         //断言
-        Assert.assertEquals(s, result);
+        Assert.assertEquals(expected.toString(), actual);
 
     }
 
@@ -43,16 +41,17 @@ public class GetUserInfoTest {
         //post中放入请求体
         JSONObject param = new JSONObject();
 
-        param.put("userId", userInfoCase.getUserId());
+        param.put("id", userInfoCase.getUserId());
         StringEntity entity = new StringEntity(param.toString(), "utf-8");
         post.setEntity(entity);
-        //httpClient设置请求头
-        TestConfig.defaultHttpClient.setCookieStore(TestConfig.store);
+        //post设置请求头
+        post.setHeader("content-type","application/json");
         //httpClient发送post请求
-        CloseableHttpResponse execute = TestConfig.defaultHttpClient.execute(post);
+        CloseableHttpResponse execute = TestConfig.client.execute(post);
         //获取响应内容
         String s = EntityUtils.toString(execute.getEntity());
-
-        return s;
+        List<User> userList= JSONArray.parseArray(s, User.class);
+        String result = userList.get(0).toString();
+        return result;
     }
 }

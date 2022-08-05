@@ -9,10 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Chapter9" />
         <module name="Chapter6" />
-        <module name="Chapter10" />
         <module name="Chapter5" />
+        <module name="Chapter10" />
         <module name="Chapter11" />
         <module name="Chapter12" />
+        <module name="Chapter13" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
@@ -25,7 +26,8 @@
       <module name="Chapter10" options="-parameters" />
       <module name="Chapter11" options="-parameters" />
       <module name="Chapter110" options="-parameters" />
-      <module name="Chapter12" options="" />
+      <module name="Chapter12" options="-verbose -Xlint:unchecked -Xlint:deprecation" />
+      <module name="Chapter13" options="-parameters -verbose -Xlint:unchecked -Xlint:deprecation -extdirs E:\Workspaces\git_test\AutoTest\Chapter13/src/main/resources/lib" />
       <module name="Chapter5" options="" />
       <module name="Chapter6" options="" />
       <module name="Chapter9" options="" />

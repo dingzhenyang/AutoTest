@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- 自定义属性 -->
+    <property name="pattern" value="%X{thread} [%date{yyyy-MM-dd HH:mm:ss.SSS}] %level %logger{36} %line - %msg%n"/>
+
+    <!--控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 设置日志输出格式 -->
+            <pattern>${pattern}</pattern>
+            <!-- 设置输出字符集编码 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 滚动文件附加器，将日志按一定策略输出到文件中，附加器名为FILE -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- file标签指定文件名称 -->
+        <file>mylog.log</file>
+        <!-- encoder标签：编码器 -->
+        <encoder>
+            <!-- 日志输出模板 -->
+            <pattern>%date %msg</pattern>
+        </encoder>
+        <!-- rollingPolicy滚动策略,这里设定基于时间滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <!-- fileNamePattern日志文件的生成模式,如下既设定了生成的文件名，也设定了间隔多久生成日志文件 -->
+            <!-- 当file标签里工作的日志文件达到了fileNamePattern标签中指定的时间/大小，file标签里的日志文件就会按照fileNamePattern的命名格式进行重命名和归档 -->
+            <fileNamePattern>log_%d{yyyy-MM-dd HH-mm-ss}.log</fileNamePattern>
+            <!--maxHistory设置归档文件的最大数量，当超过这个数量，就会删除比较早生成的日志文件-->
+            <maxHistory>3</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.course" level="INFO">
+        <!--appender-ref将附加器指定给记录器-->
+        <appender-ref ref="FILE"/>
+
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+
+    </root>
+</configuration>
